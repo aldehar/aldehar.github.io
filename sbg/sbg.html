@@ -1,0 +1,581 @@
+<html>
+<head>
+<link href="../lib/css/bootstrap.min.css" rel="stylesheet">
+<style>
+.diagonal1 {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  border-bottom: 10px solid gray;
+  border-right: 10px solid yellow;
+}
+.diagonal2 {
+  width: 0px;
+  height: 0px;
+  background-color: red;
+  border-bottom: 40px solid gray;
+  border-right: 40px solid yellow;
+}
+.diagonal3 {
+  width: 0px;
+  height: 0px;
+  border-bottom: 60px solid gray;
+  border-right: 40px solid rgba(0,0,0,0);
+}
+
+.hBox {
+  width: 350px;
+  height: 50px;
+  border: 1px solid black;
+  clear: both;
+  margin-top: 5px;
+}
+
+.left{
+  float:left;
+}
+
+.clearBoth {
+  clear: both;
+}
+
+.mini_title{
+  width: 100px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  /* border: 1px solid red; */
+}
+
+.inner_box{
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+}
+
+.inner_margin{
+  margin-left:25px;
+}
+
+.line_se {
+  width: 5px;
+  height: 50px;
+  background-color: peru;
+  transform: rotate(-45deg);
+}
+.line_ne {
+  width: 5px;
+  height: 50px;
+  background-color: peru;
+  transform: rotate(45deg);
+}
+
+.line_up {
+  width: 50px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 5px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+}
+
+.line_up_left {
+  width: 45px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 5px;
+  border-left-width: 5px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+}
+
+.line_up_right {
+  width: 45px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 5px;
+  border-left-width: 0px;
+  border-right-width: 5px;
+  border-bottom-width: 0px;
+}
+
+.line_down {
+  width: 50px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 5px;
+}
+
+.line_left{
+  width: 45px;
+  height: 50px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 5px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+}
+
+.line_down_left{
+  width: 45px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 5px;
+  border-right-width: 0px;
+  border-bottom-width: 5px;
+}
+
+.line_right{
+  width: 45px;
+  height: 50px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 5px;
+  border-bottom-width: 0px;
+}
+
+.line_down_right{
+  width: 45px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 5px;
+  border-bottom-width: 5px;
+}
+
+.line_down_left_right{
+  width: 40px;
+  height: 45px;
+  border-color: peru;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 5px;
+  border-right-width: 5px;
+  border-bottom-width: 5px;
+}
+
+.line_none{
+  width: 50px;
+  height: 50px;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  
+}
+</style>
+</head>
+<body>
+<hr/>
+<div class="alert alert-primary" role="alert">해당 페이지는 1920x1080 해상도 최적화 되어 있습니다.</div>
+<hr/>
+<div id="selectBox">
+	타입
+	<select name="type">
+	</select>
+	번호
+	<select name="no">
+		<option>ALL</option>
+		<option>1</option>
+		<option>2</option>
+	</select>
+	<input type="button" value="적용" onclick="javascript:fnApply();">
+	<input type="button" value="요약" onclick="javascript:fnGetSummary();">
+</div>
+<div id="contents">
+</div>
+<div id="popup" style="visibility:hidden;">
+</div>
+<br/>
+<script src="../lib/js/bootstrap.min.js"></script>
+<script src="../lib/js/sbg.js"></script>
+<script>
+window.onload = function(){
+	// type
+	let selType = document.querySelector('select[name="type"]');
+	let typeList = fnGetTypeList();
+	
+	let strHtml = '';
+	
+	for (let i=0; i < typeList.length; i++)
+	{
+		strHtml += '<option>'+ typeList[i] +'</option>';
+		
+	}
+	selType.innerHTML = strHtml;
+	
+	// no
+	strHtml = '<option>ALL</option>';
+	let selNo = document.querySelector('select[name="no"]');
+	for (let i=1; i <= 14; i++)
+	{
+		strHtml += '<option>'+ i +'</option>';
+		
+	}
+	selNo.innerHTML = strHtml;
+	
+	console.log('화면 해상도 : '+ screen.width +' x '+ screen.height);
+	
+	fnGetSummary();
+};
+
+function fnShowPopup(o, type, no)
+{
+	let strHtml = '';
+	
+	strHtml += '<h3>'+ fnGetType(type) +' '+ no +'</h3>';
+	strHtml += '<a style="margin-left:600px;" href="#" onclick="javascript:fnClosePopup(\''+type +'\',' +no +');">닫기</a><br/>'
+	
+	let imgTemplateList = [
+		'sbg_{0}_c_{1}.PNG',
+		'sbg_{0}_basic_fd_{1}.PNG',
+		'sbg_{0}_ec_{1}.PNG',
+		'sbg_{0}_add_{1}.PNG'
+	];
+	
+	for(let i=0; i < imgTemplateList.length; i++)
+	{
+		let strImgPath = imgTemplateList[i];
+		strImgPath = strImgPath.replace('{0}', type);
+		strImgPath = strImgPath.replace('{1}', no);
+		
+		// error circuit
+		if(i == 2)
+		{
+			strHtml += '<a href="#" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
+			strHtml += '<a href="#" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
+			strHtml += '<br/>';
+			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+		else
+		{
+			strHtml += '<img src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+	}
+	
+	let popup = document.querySelector('#popup');
+	popup.innerHTML = strHtml;
+	
+	popup.style.position = 'absolute';
+	
+	let screenWidth = screen.width;
+	let screenHeight = screen.height;
+	
+	let wh = {
+		'tdHeight' : 150,
+		'w1920' : 75,
+		'w2560' : 500,
+		'h1080' : 1080,
+		'h1440' : 1440,
+		'hOther' : 500
+	}
+	
+	if(type == 'air')
+	{
+		popup.style.top = no * wh.tdHeight +'px';
+	}
+	else if(type == 'oil')
+	{
+		if(screenHeight <= 1080)
+		{
+			popup.style.top = (no * wh.tdHeight + wh.h1080) +'px';
+		}
+		else
+		{
+			popup.style.top = (no * wh.tdHeight + wh.h1440) +'px';
+		}
+	}
+	else
+	{
+		popup.style.top = screenHeight/2 - wh.hOther;
+	}
+	
+	if(screenWidth <= 1920)
+	{
+		popup.style.left = screenWidth/2 + wh.w1920;
+	}
+	else
+	{
+		popup.style.left = screenWidth/2 + wh.w2560;
+	}
+	
+	popup.style.background = 'white';
+	popup.style.border = '2px solid blue';
+	
+	let arrType = ['air', 'oil'];
+	
+	for(let i=0; i < 2; i++)
+	{
+		for(let j=1; j <= 14; j++)
+		{
+			let otherTr = document.querySelector('.cls_'+ arrType[i]+'_'+ j);
+			otherTr.style.border = '1px solid #dee2e6';
+			otherTr.style.background = 'white';
+		}
+	}
+	
+	o.style.border = '1px solid black';
+	o.style.background = '#eeeeee';
+	
+	
+	
+	popup.style.visibility = 'visible';
+}
+
+function fnShowFix(o, type, no, isErrorCircuit)
+{
+	if(type != 'air' ||  no != 1)
+	{
+		alert('@TODO - 이미지 파일 수정 중...')
+		return;
+	}
+	let strFromCls = '';
+	let strToCls = '';
+	let strImgPath = '';
+	
+	if(isErrorCircuit)
+	{
+		strFromCls = 'clsErrorCircuit';
+		strToCls = 'clsFixCircuit';
+		strImgPath = 'sbg_{0}_fc_{1}.PNG';
+	}
+	else
+	{
+		strFromCls = 'clsFixCircuit';
+		strToCls = 'clsErrorCircuit';
+		strImgPath = 'sbg_{0}_ec_{1}.PNG';
+	}
+
+	let ec = document.querySelector('.'+ strFromCls);
+	strImgPath = strImgPath.replace('{0}', type);
+	strImgPath = strImgPath.replace('{1}', no);
+	console.log(ec);
+	
+	let tempPath = '../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath ;
+	
+	ec.src = tempPath;
+	ec.className = strToCls;
+}
+
+function fnClosePopup(type, no)
+{
+	let popup = document.querySelector('#popup');
+	popup.style.visibility = 'hidden';
+	
+	let clickedTr = document.querySelector('.cls_'+type+'_'+no);
+	clickedTr.style.border = '1px solid #dee2e6';
+	clickedTr.style.background = 'white';
+}
+
+function fnGetSummary()
+{
+	let strHtml = '';
+	strHtml += '<table class="table table-bordered">';
+	strHtml += '<tr class="table-dark">';
+	strHtml += '<td>Type</td>';
+	strHtml += '<td>No</td>';
+	strHtml += '<td>FD</td>';
+	strHtml += '<td>Sols</td>';
+	strHtml += '<td>Relay</td>';
+	strHtml += '<td>Sol</td>';
+	strHtml += '<td>Fix</td>';
+	strHtml += '<td>Add</td>';
+	strHtml += '<td>Design</td>';
+	strHtml += '</tr>';
+	let typeList = [sbgList.air, sbgList.oil]
+	
+	for(let i=0; i < typeList.length; i++)
+	{
+		let oType = typeList[i];
+		for(let j=0; j < oType.length; j++)
+		{
+			let o = oType[j];
+			strHtml += '<tr class="cls_'+ o.type +'_'+ o.no+'" onclick="javascript:fnShowPopup(this, \''+ o.type +'\','+ o.no +')">'	
+			strHtml += '<td>'+ fnGetType(o.type)+'</td>';
+			strHtml += '<td>'+ o.no+'</td>';
+			
+			//변위단계선도
+			strHtml += '<td>';
+			let fdList = o.fd;
+			for(let j=0; j < fdList.length; j++)
+			{
+				let oFd = fdList[j];
+				
+				strHtml += '<div class="clearBoth"></div>';
+				strHtml += '<div class="hBox"><br/>';
+				strHtml += '<div class="left mini_title">'+ fnGetType(oFd.type) +' '+ oFd.name +'</div><br/>'
+				
+				for(let k=0; k < oFd.list.length; k++)
+				{
+					strHtml += '<div class="left inner_box"><br/>';
+					strHtml += '<div class="'+ fnGetClassByType(oFd.list[k]) +'"></div><br/>';
+					strHtml += '</div><br/>';
+				}
+				
+				strHtml += '</div>';
+			}
+			
+			strHtml += '<br class="clearBoth"/>';
+			strHtml += '</td>';
+			
+			//sols
+			strHtml += '<td>';
+			for(let k=0; k < o.sols.length; k++)
+			{
+				let oSol = o.sols[k];
+				strHtml += oSol.name +' '+ oSol.type +', SW : '+ oSol.sw +'<br>';
+			}
+			strHtml += '</td>';
+			
+			strHtml += '<td>'+ o.relay+'</td>';
+			strHtml += '<td>'+ o.sol+'</td>';
+			
+			strHtml += '<td>';
+			for(let k=0; k < o.fixList.length; k++)
+			{
+				strHtml += o.fixList[k] +'<br>';
+			}
+			strHtml += '</td>';
+			
+			strHtml += '<td>';
+			for(let k=0; k < o.addList.length; k++)
+			{
+				strHtml += o.addList[k] +'<br>';
+			}
+			strHtml += '</td>';
+			
+			strHtml += '<td>'+ o.design +'</td>';
+			strHtml += '</tr>'
+		}
+	}
+	
+	strHtml += '</table>';
+	
+	let contents = document.querySelector("#contents");
+	strHtml = strHtml.replaceAll('<br/>', '');
+	contents.innerHTML = strHtml;
+}
+
+function fnGetHtmlByTypeAll(oList)
+{
+	let strHtml = '';
+	
+	for(let i=0; i < oList.length; i++)
+	{
+		
+		let o = oList[i];
+		
+		strHtml += '<h2>'+ fnGetType(o.type) +' '+ o.no +'</h2><br/>';
+		strHtml += '<h3>변위 단계 선도</h3><br/>';
+		
+		
+		let fdList = o.fd;
+		for(let j=0; j < fdList.length; j++)
+		{
+			let oFd = fdList[j];
+			
+			strHtml += '<div class="clearBoth"></div>';
+			strHtml += '<div class="hBox"><br/>';
+			strHtml += '<div class="left mini_title">'+ fnGetType(oFd.type) +' '+ oFd.name +'</div><br/>'
+			
+			for(let k=0; k < oFd.list.length; k++)
+			{
+				strHtml += '<div class="left inner_box"><br/>';
+				strHtml += '<div class="'+ fnGetClassByType(oFd.list[k]) +'"></div><br/>';
+				strHtml += '</div><br/>';
+			}
+			
+			strHtml += '</div>';
+		}
+		
+		strHtml += '<br class="clearBoth"/>';
+	}
+	
+	return strHtml;
+}
+
+function fnApply()
+{
+	let type = document.querySelector('select[name="type"] > option:checked').value;
+	let no = document.querySelector('select[name="no"] > option:checked').value;
+	
+	let strHtml = '';
+	
+	if(no == 'ALL')
+	{
+		if(type == 'ALL')
+		{
+			strHtml += fnGetHtmlByTypeAll(sbgList.air);
+			strHtml += fnGetHtmlByTypeAll(sbgList.oil);
+		}
+		else
+		{
+			strHtml += fnGetHtmlByTypeAll(sbgList[fnGetTypeToEng(type)]);
+		}
+	}
+	else
+	{
+		let tempTypeList = [];
+		
+		if(type == 'ALL')
+		{
+			tempTypeList.push('air');
+			tempTypeList.push('oil')
+		}
+		else
+		{
+			tempTypeList.push(fnGetTypeToEng(type))
+		}
+		
+		for(let i=0; i < tempTypeList.length; i++)
+		{
+			let o = sbgList[tempTypeList[i]][no-1];
+			
+			strHtml += '<h2>'+ fnGetType(o.type) +' '+ o.no +'</h2><br/>';
+			strHtml += '<h3>변위 단계 선도</h3><br/>';
+			
+			let fdList = o.fd;
+			for(let j=0; j < fdList.length; j++)
+			{
+				let oFd = fdList[j];
+				
+				strHtml += '<div class="clearBoth"></div>';
+				strHtml += '<div class="hBox"><br/>';
+				strHtml += '<div class="left mini_title">'+ fnGetType(oFd.type) +' '+ oFd.name +'</div><br/>'
+				
+				for(let k=0; k < oFd.list.length; k++)
+				{
+					strHtml += '<div class="left inner_box"><br/>';
+					strHtml += '<div class="'+ fnGetClassByType(oFd.list[k]) +'"></div><br/>';
+					strHtml += '</div><br/>';
+				}
+				
+				strHtml += '</div>';
+			}
+			strHtml += '<br class="clearBoth"/>';
+		}
+	}
+	
+	let contents = document.querySelector("#contents");
+	strHtml = strHtml.replaceAll('<br/>', '');
+	contents.innerHTML = strHtml;
+}
+</script>
+</body>
+<html>

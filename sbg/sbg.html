@@ -258,8 +258,8 @@ function fnShowPopup(o, type, no)
 		// error circuit
 		if(i == 2)
 		{
-			strHtml += '<a href="#" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
-			strHtml += '<a href="#" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
+			strHtml += '<a href="#popup" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
+			strHtml += '<a href="#popup" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
 			strHtml += '<br/>';
 			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}
@@ -281,8 +281,8 @@ function fnShowPopup(o, type, no)
 		'tdHeight' : 150,
 		'w1920' : 75,
 		'w2560' : 500,
-		'h1080' : 1080,
-		'h1440' : 1440,
+		'h1080' : 1080+400,
+		'h1440' : 1440+500,
 		'hOther' : 500
 	}
 	
@@ -333,18 +333,12 @@ function fnShowPopup(o, type, no)
 	o.style.border = '1px solid black';
 	o.style.background = '#eeeeee';
 	
-	
-	
 	popup.style.visibility = 'visible';
+	location.href = '#popup';
 }
 
 function fnShowFix(o, type, no, isErrorCircuit)
 {
-	if(type != 'air' ||  no != 1)
-	{
-		alert('@TODO - 이미지 파일 수정 중...')
-		return;
-	}
 	let strFromCls = '';
 	let strToCls = '';
 	let strImgPath = '';

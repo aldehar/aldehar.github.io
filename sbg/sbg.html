@@ -1,191 +1,19 @@
 <html>
 <head>
 <link href="../lib/css/bootstrap.min.css" rel="stylesheet">
+<link href="../lib/css/sbg.css" rel="stylesheet">
 <style>
-.diagonal1 {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-  border-bottom: 10px solid gray;
-  border-right: 10px solid yellow;
-}
-.diagonal2 {
-  width: 0px;
-  height: 0px;
-  background-color: red;
-  border-bottom: 40px solid gray;
-  border-right: 40px solid yellow;
-}
-.diagonal3 {
-  width: 0px;
-  height: 0px;
-  border-bottom: 60px solid gray;
-  border-right: 40px solid rgba(0,0,0,0);
-}
 
-.hBox {
-  width: 350px;
-  height: 50px;
-  border: 1px solid black;
-  clear: both;
-  margin-top: 5px;
-}
-
-.left{
-  float:left;
-}
-
-.clearBoth {
-  clear: both;
-}
-
-.mini_title{
-  width: 100px;
-  height: 50px;
-  text-align: center;
-  vertical-align: middle;
-  /* border: 1px solid red; */
-}
-
-.inner_box{
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
-}
-
-.inner_margin{
-  margin-left:25px;
-}
-
-.line_se {
-  width: 5px;
-  height: 50px;
-  background-color: peru;
-  transform: rotate(-45deg);
-}
-.line_ne {
-  width: 5px;
-  height: 50px;
-  background-color: peru;
-  transform: rotate(45deg);
-}
-
-.line_up {
-  width: 50px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 5px;
-  border-left-width: 0px;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-}
-
-.line_up_left {
-  width: 45px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 5px;
-  border-left-width: 5px;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-}
-
-.line_up_right {
-  width: 45px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 5px;
-  border-left-width: 0px;
-  border-right-width: 5px;
-  border-bottom-width: 0px;
-}
-
-.line_down {
-  width: 50px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 0px;
-  border-bottom-width: 5px;
-}
-
-.line_left{
-  width: 45px;
-  height: 50px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 5px;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-}
-
-.line_down_left{
-  width: 45px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 5px;
-  border-right-width: 0px;
-  border-bottom-width: 5px;
-}
-
-.line_right{
-  width: 45px;
-  height: 50px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 5px;
-  border-bottom-width: 0px;
-}
-
-.line_down_right{
-  width: 45px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 5px;
-  border-bottom-width: 5px;
-}
-
-.line_down_left_right{
-  width: 40px;
-  height: 45px;
-  border-color: peru;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 5px;
-  border-right-width: 5px;
-  border-bottom-width: 5px;
-}
-
-.line_none{
-  width: 50px;
-  height: 50px;
-  border-style: solid;
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-  
-}
 </style>
 </head>
 <body>
-<hr/>
-<div class="alert alert-primary" role="alert">해당 페이지는 1920x1080 해상도 최적화 되어 있습니다.</div>
-<hr/>
+<div id="warnScreenSize" style="display:none;" >
+	<hr/>
+		<div class="alert alert-primary" role="alert">해당 페이지는 1920x1080 해상도 최적화 되어 있습니다.</div>
+	<hr/>
+</div>
 <div id="selectBox">
+	<!--
 	타입
 	<select name="type">
 	</select>
@@ -196,6 +24,7 @@
 		<option>2</option>
 	</select>
 	<input type="button" value="적용" onclick="javascript:fnApply();">
+	-->
 	<input type="button" value="요약" onclick="javascript:fnGetSummary();">
 </div>
 <div id="contents">
@@ -213,6 +42,7 @@ window.onload = function(){
 	
 	let strHtml = '';
 	
+	/*
 	for (let i=0; i < typeList.length; i++)
 	{
 		strHtml += '<option>'+ typeList[i] +'</option>';
@@ -229,12 +59,31 @@ window.onload = function(){
 		
 	}
 	selNo.innerHTML = strHtml;
+	*/
 	
-	console.log('화면 해상도 : '+ screen.width +' x '+ screen.height);
+	let screenWidth = screen.width;
+	let screenHeight = screen.height;
+	console.log('화면 해상도 : '+ screenWidth +' x '+ screenHeight);
 	
+	// 해상도 권장 표시
+	if(screenWidth != 1920 && screenHeight != 1080)
+	{
+		document.querySelector('#warnScreenSize').style.display = 'block';
+	}
+	
+	// 요약 표시
 	fnGetSummary();
 };
 
+/* ***************
+ *
+ * 팝업 표시
+ *
+ * @o - this
+ * @type - 'air', 'oil'
+ * @no - 1~14
+ *
+ * ***************/
 function fnShowPopup(o, type, no)
 {
 	let strHtml = '';
@@ -285,7 +134,7 @@ function fnShowPopup(o, type, no)
 	let wh = {
 		'tdHeight' : 150,
 		'w1920' : 75,
-		'w2560' : 500,
+		'w2560' : -70,
 		'h1080' : 1080+400,
 		'h1440' : 1440+500,
 		'hOther' : 500
@@ -342,12 +191,20 @@ function fnShowPopup(o, type, no)
 	location.href = '#popup';
 }
 
+/* ***************
+ *
+ * 수정or오류 회로 표시
+ *
+ * @o - this
+ * @type - 'air', 'oil'
+ * @no - 1~14
+ * @isErrorCircuit - true, false
+ * @isExtra - true, undefined - 추가 회로 표시
+ *
+ * ***************/
 function fnShowFix(o, type, no, isErrorCircuit, isExtra)
 {
-	console.log('type:['+type+'], no=['+ no +'],isEc=['+ isErrorCircuit +'],isExtra['+ isExtra +']');
-	
 	let strFromCls = 'clsErrorCircuit';
-	let strToCls = '';
 	let strImgPath = '';
 	
 	if(isErrorCircuit)
@@ -374,6 +231,14 @@ function fnShowFix(o, type, no, isErrorCircuit, isExtra)
 	ec.src = tempPath;
 }
 
+/* ***************
+ *
+ * 팝업 닫기
+ * 
+ * @type - 'air', 'oil'
+ * @no - 1~14
+ *
+ * ***************/
 function fnClosePopup(type, no)
 {
 	let popup = document.querySelector('#popup');
@@ -384,10 +249,17 @@ function fnClosePopup(type, no)
 	clickedTr.style.background = 'white';
 }
 
+/* ***************
+ *
+ * 요약 표시
+ *
+ * ***************/
 function fnGetSummary()
 {
 	let strHtml = '';
+	
 	strHtml += '<table class="table table-bordered">';
+	// table header
 	strHtml += '<tr class="table-dark">';
 	strHtml += '<td>Type</td>';
 	strHtml += '<td>No</td>';
@@ -399,7 +271,8 @@ function fnGetSummary()
 	strHtml += '<td>Add</td>';
 	strHtml += '<td>Design</td>';
 	strHtml += '</tr>';
-	let typeList = [sbgList.air, sbgList.oil]
+	
+	let typeList = [sbg.air, sbg.oil]
 	
 	for(let i=0; i < typeList.length; i++)
 	{
@@ -447,6 +320,7 @@ function fnGetSummary()
 			strHtml += '<td>'+ o.relay+'</td>';
 			strHtml += '<td>'+ o.sol+'</td>';
 			
+			// fix list
 			strHtml += '<td>';
 			for(let k=0; k < o.fixList.length; k++)
 			{
@@ -454,6 +328,7 @@ function fnGetSummary()
 			}
 			strHtml += '</td>';
 			
+			// add list
 			strHtml += '<td>';
 			for(let k=0; k < o.addList.length; k++)
 			{
@@ -473,6 +348,13 @@ function fnGetSummary()
 	contents.innerHTML = strHtml;
 }
 
+/* ***************
+ *
+ * 타입에 대한 내용 전부 표시
+ *
+ * @oList - this
+ *
+ * ***************/
 function fnGetHtmlByTypeAll(oList)
 {
 	let strHtml = '';
@@ -511,6 +393,11 @@ function fnGetHtmlByTypeAll(oList)
 	return strHtml;
 }
 
+/* ***************
+ *
+ * 선택된 내용 적용
+ *
+ * ***************/
 function fnApply()
 {
 	let type = document.querySelector('select[name="type"] > option:checked').value;
@@ -522,12 +409,12 @@ function fnApply()
 	{
 		if(type == 'ALL')
 		{
-			strHtml += fnGetHtmlByTypeAll(sbgList.air);
-			strHtml += fnGetHtmlByTypeAll(sbgList.oil);
+			strHtml += fnGetHtmlByTypeAll(sbg.air);
+			strHtml += fnGetHtmlByTypeAll(sbg.oil);
 		}
 		else
 		{
-			strHtml += fnGetHtmlByTypeAll(sbgList[fnGetTypeToEng(type)]);
+			strHtml += fnGetHtmlByTypeAll(sbg[fnGetTypeToEng(type)]);
 		}
 	}
 	else
@@ -546,7 +433,7 @@ function fnApply()
 		
 		for(let i=0; i < tempTypeList.length; i++)
 		{
-			let o = sbgList[tempTypeList[i]][no-1];
+			let o = sbg[tempTypeList[i]][no-1];
 			
 			strHtml += '<h2>'+ fnGetType(o.type) +' '+ o.no +'</h2><br/>';
 			strHtml += '<h3>변위 단계 선도</h3><br/>';

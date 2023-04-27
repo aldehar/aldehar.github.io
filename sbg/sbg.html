@@ -260,6 +260,11 @@ function fnShowPopup(o, type, no)
 		{
 			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
 			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
+			// 공압 10번 일 경우,
+			if(type == 'air' && no == 10)
+			{
+				strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true, true);">[수정2-PB2제거]</a>'
+			}
 			strHtml += '<br/>';
 			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}
@@ -337,34 +342,36 @@ function fnShowPopup(o, type, no)
 	location.href = '#popup';
 }
 
-function fnShowFix(o, type, no, isErrorCircuit)
+function fnShowFix(o, type, no, isErrorCircuit, isExtra)
 {
-	let strFromCls = '';
+	console.log('type:['+type+'], no=['+ no +'],isEc=['+ isErrorCircuit +'],isExtra['+ isExtra +']');
+	
+	let strFromCls = 'clsErrorCircuit';
 	let strToCls = '';
 	let strImgPath = '';
 	
 	if(isErrorCircuit)
 	{
-		strFromCls = 'clsErrorCircuit';
-		strToCls = 'clsFixCircuit';
 		strImgPath = 'sbg_{0}_fc_{1}.PNG';
 	}
 	else
 	{
-		strFromCls = 'clsFixCircuit';
-		strToCls = 'clsErrorCircuit';
 		strImgPath = 'sbg_{0}_ec_{1}.PNG';
 	}
 
 	let ec = document.querySelector('.'+ strFromCls);
 	strImgPath = strImgPath.replace('{0}', type);
-	strImgPath = strImgPath.replace('{1}', no);
-	console.log(ec);
+	if(typeof(isExtra) != 'undefined' && isExtra == true)
+	{
+		strImgPath = strImgPath.replace('{1}', no+'_pb2x');
+	}
+	else
+	{
+		strImgPath = strImgPath.replace('{1}', no);
+	}
 	
 	let tempPath = '../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath ;
-	
 	ec.src = tempPath;
-	ec.className = strToCls;
 }
 
 function fnClosePopup(type, no)

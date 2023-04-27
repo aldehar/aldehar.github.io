@@ -240,7 +240,7 @@ function fnShowPopup(o, type, no)
 	let strHtml = '';
 	
 	strHtml += '<h3>'+ fnGetType(type) +' '+ no +'</h3>';
-	strHtml += '<a style="margin-left:600px;" href="#" onclick="javascript:fnClosePopup(\''+type +'\',' +no +');">닫기</a><br/>'
+	strHtml += '<a style="margin-left:600px;" href="#none" onclick="javascript:fnClosePopup(\''+type +'\',' +no +');">닫기</a><br/>'
 	
 	let imgTemplateList = [
 		'sbg_{0}_c_{1}.PNG',
@@ -258,8 +258,8 @@ function fnShowPopup(o, type, no)
 		// error circuit
 		if(i == 2)
 		{
-			strHtml += '<a href="#popup" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
-			strHtml += '<a href="#popup" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
+			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
+			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
 			strHtml += '<br/>';
 			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}

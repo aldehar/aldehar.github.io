@@ -26,6 +26,12 @@
 	<input type="button" value="적용" onclick="javascript:fnApply();">
 	-->
 	<input type="button" value="요약" onclick="javascript:fnGetSummary();">
+	<div class="form-check">
+	  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+	  <label class="form-check-label" for="flexCheckChecked">
+		수정회로 바로 보여주기
+	  </label>
+	</div>
 </div>
 <div id="contents">
 </div>
@@ -95,28 +101,42 @@ function fnShowPopup(o, type, no)
 		'sbg_{0}_c_{1}.PNG',
 		'sbg_{0}_basic_fd_{1}.PNG',
 		'sbg_{0}_ec_{1}.PNG',
+		'sbg_{0}_fc_{1}.PNG',
 		'sbg_{0}_add_{1}.PNG',
 		'sbg_{0}_add_sol_{1}.png'
 	];
 	
 	for(let i=0; i < imgTemplateList.length; i++)
 	{
-		let strImgPath = imgTemplateList[i];
+		let strImgPath = ''
+		strImgPath = imgTemplateList[i];
 		strImgPath = strImgPath.replace('{0}', type);
 		strImgPath = strImgPath.replace('{1}', no);
 		
 		// error circuit
 		if(i == 2)
 		{
+			let isChcked = document.querySelector('#flexCheckChecked').checked;
+			
+			if(isChcked)
+			{
+				strImgPath = strImgPath.replace('ec', 'fc');
+			}
+			
 			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
 			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
-			// 공압 10번 일 경우,
+			// 공압 10번 일 경우, PB2 제거 버전 추가
 			if(type == 'air' && no == 10)
 			{
 				strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true, true);">[수정2-PB2제거]</a>'
 			}
 			strHtml += '<br/>';
 			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+		// fix circuit
+		else if(i == 3)
+		{
+			continue;
 		}
 		else if(i == imgTemplateList.length -1)
 		{

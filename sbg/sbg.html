@@ -95,7 +95,8 @@ function fnShowPopup(o, type, no)
 		'sbg_{0}_c_{1}.PNG',
 		'sbg_{0}_basic_fd_{1}.PNG',
 		'sbg_{0}_ec_{1}.PNG',
-		'sbg_{0}_add_{1}.PNG'
+		'sbg_{0}_add_{1}.PNG',
+		'sbg_{0}_add_sol_{1}.png'
 	];
 	
 	for(let i=0; i < imgTemplateList.length; i++)
@@ -116,6 +117,11 @@ function fnShowPopup(o, type, no)
 			}
 			strHtml += '<br/>';
 			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+		else if(i == imgTemplateList.length -1)
+		{
+			strHtml += '<b>[응용 해답]</b><br/>';
+			strHtml += '<img src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}
 		else
 		{

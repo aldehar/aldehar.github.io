@@ -339,7 +339,23 @@ function fnGetSummary()
 			for(let k=0; k < o.sols.length; k++)
 			{
 				let oSol = o.sols[k];
-				strHtml += oSol.name +' '+ oSol.type +', SW : '+ oSol.sw +'<br>';
+				strHtml += '<h6>';
+				
+				if(oSol.type == '-')
+				{
+					strHtml +=  fnGetType('Valve');
+				}
+				else
+				{
+					strHtml +=  fnGetType(oSol.type);
+				}
+				strHtml += ' '+ oSol.name +' : '+ fnGetType(oSol.solType) +', 스위치 : '+ oSol.sw + ', 밸브 명 : '+ oSol.valveName;
+				let special = oSol.special;
+				if(special != null && typeof(special) != 'undefined')
+				{
+					strHtml += '<span class="badge text-bg-warning">'+oSol.special +'</span>';
+				}
+				strHtml += '</h6>'
 			}
 			strHtml += '</td>';
 			

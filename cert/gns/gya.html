@@ -1,7 +1,7 @@
 <html>
 <head>
-<link href="../lib/css/bootstrap.min.css" rel="stylesheet">
-<link href="../lib/css/sbg.css" rel="stylesheet">
+<link href="../../lib/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../lib/css/sbg.css" rel="stylesheet">
 <style>
 
 </style>
@@ -38,8 +38,8 @@
 <div id="popup" style="visibility:hidden;">
 </div>
 <br/>
-<script src="../lib/js/bootstrap.min.js"></script>
-<script src="../lib/js/sbg.js"></script>
+<script src="../../lib/js/bootstrap.min.js"></script>
+<script src="../../lib/js/cert/sbg.js"></script>
 <script>
 window.onload = function(){
 	// type
@@ -97,6 +97,8 @@ function fnShowPopup(o, type, no)
 	strHtml += '<h3>'+ fnGetType(type) +' '+ no +'</h3>';
 	strHtml += '<a style="margin-left:600px;" href="#none" onclick="javascript:fnClosePopup(\''+type +'\',' +no +');">닫기</a><br/>'
 	
+	let strPathPrefix = '../../lib/imgs/cert/sbg/';
+	
 	let imgTemplateList = [
 		'sbg_{0}_c_{1}.PNG',
 		'sbg_{0}_basic_fd_{1}.PNG',
@@ -131,7 +133,7 @@ function fnShowPopup(o, type, no)
 				strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true, true);">[수정2-PB2제거]</a>'
 			}
 			strHtml += '<br/>';
-			strHtml += '<img class="clsErrorCircuit" src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+			strHtml += '<img class="clsErrorCircuit" src="'+strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}
 		// fix circuit
 		else if(i == 3)
@@ -141,11 +143,11 @@ function fnShowPopup(o, type, no)
 		else if(i == imgTemplateList.length -1)
 		{
 			strHtml += '<b>[응용 해답]</b><br/>';
-			strHtml += '<img src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+			strHtml += '<img src="'+ strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}
 		else
 		{
-			strHtml += '<img src="../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath +'"><br/>';
+			strHtml += '<img src="'+ strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
 		}
 	}
 	
@@ -253,7 +255,9 @@ function fnShowFix(o, type, no, isErrorCircuit, isExtra)
 		strImgPath = strImgPath.replace('{1}', no);
 	}
 	
-	let tempPath = '../lib/imgs/'+ type +'/'+ no +'/'+ strImgPath ;
+	
+	let strPathPrefix = '../../lib/imgs/cert/sbg/';
+	let tempPath = strPathPrefix +type +'/'+ no +'/'+ strImgPath ;
 	ec.src = tempPath;
 }
 

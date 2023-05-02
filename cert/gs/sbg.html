@@ -1,0 +1,517 @@
+<html>
+<head>
+<link href="../../lib/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../lib/css/sbg.css" rel="stylesheet">
+<style>
+
+</style>
+</head>
+<body>
+<hr/>
+<div class="alert alert-success" role="alert">각 행을 클릭 시, 팝업이 보여집니다.</div>
+<hr/>
+<div id="warnScreenSize" style="display:none;" >
+		<div class="alert alert-info" role="alert">해당 페이지는 1920x1080 해상도 최적화 되어 있습니다.</div>
+	<hr/>
+</div>
+<div id="selectBox">
+	<!--
+	타입
+	<select name="type">
+	</select>
+	번호
+	<select name="no">
+		<option>ALL</option>
+		<option>1</option>
+		<option>2</option>
+	</select>
+	<input type="button" value="적용" onclick="javascript:fnApply();">
+	-->
+	<input type="button" value="요약" onclick="javascript:fnGetSummary();">
+	<div class="form-check">
+	  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+	  <label class="form-check-label" for="flexCheckChecked">
+		수정회로 바로 보여주기
+	  </label>
+	</div>
+</div>
+<div id="contents">
+</div>
+<div id="popup" style="visibility:hidden;">
+</div>
+<br/>
+<script src="../../lib/js/bootstrap.min.js"></script>
+<script src="../../lib/js/cert/sbg.js"></script>
+<script>
+window.onload = function(){
+	// type
+	let selType = document.querySelector('select[name="type"]');
+	let typeList = fnGetTypeList();
+	
+	let strHtml = '';
+	
+	/*
+	for (let i=0; i < typeList.length; i++)
+	{
+		strHtml += '<option>'+ typeList[i] +'</option>';
+		
+	}
+	selType.innerHTML = strHtml;
+	
+	// no
+	strHtml = '<option>ALL</option>';
+	let selNo = document.querySelector('select[name="no"]');
+	for (let i=1; i <= 14; i++)
+	{
+		strHtml += '<option>'+ i +'</option>';
+		
+	}
+	selNo.innerHTML = strHtml;
+	*/
+	
+	let screenWidth = screen.width;
+	let screenHeight = screen.height;
+	console.log('화면 해상도 : '+ screenWidth +' x '+ screenHeight);
+	
+	// 해상도 권장 표시
+	if(screenWidth != 1920 && screenHeight != 1080)
+	{
+		document.querySelector('#warnScreenSize').style.display = 'block';
+	}
+	
+	// 요약 표시
+	fnGetSummary();
+};
+
+/* ***************
+ *
+ * 팝업 표시
+ *
+ * @o - this
+ * @type - 'air', 'oil'
+ * @no - 1~14
+ *
+ * ***************/
+function fnShowPopup(o, type, no)
+{
+	let strHtml = '';
+	
+	strHtml += '<h3>'+ fnGetType(type) +' '+ no +'</h3>';
+	strHtml += '<a style="margin-left:600px;" href="#none" onclick="javascript:fnClosePopup(\''+type +'\',' +no +');">닫기</a><br/>'
+	
+	let strPathPrefix = '../../lib/imgs/cert/sbg/';
+	
+	let imgTemplateList = [
+		'sbg_{0}_c_{1}.PNG',
+		'sbg_{0}_basic_fd_{1}.PNG',
+		'sbg_{0}_ec_{1}.PNG',
+		'sbg_{0}_fc_{1}.PNG',
+		'sbg_{0}_add_{1}.PNG',
+		'sbg_{0}_add_sol_{1}.png'
+	];
+	
+	for(let i=0; i < imgTemplateList.length; i++)
+	{
+		let strImgPath = ''
+		strImgPath = imgTemplateList[i];
+		strImgPath = strImgPath.replace('{0}', type);
+		strImgPath = strImgPath.replace('{1}', no);
+		
+		// error circuit
+		if(i == 2)
+		{
+			let isChcked = document.querySelector('#flexCheckChecked').checked;
+			
+			if(isChcked)
+			{
+				strImgPath = strImgPath.replace('ec', 'fc');
+			}
+			
+			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
+			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
+			// 공압 10번 일 경우, PB2 제거 버전 추가
+			if(type == 'air' && no == 10)
+			{
+				strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true, true);">[수정2-PB2제거]</a>'
+			}
+			strHtml += '<br/>';
+			strHtml += '<img class="clsErrorCircuit" src="'+strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+		// fix circuit
+		else if(i == 3)
+		{
+			continue;
+		}
+		else if(i == imgTemplateList.length -1)
+		{
+			strHtml += '<b>[응용 해답]</b><br/>';
+			strHtml += '<img src="'+ strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+		else
+		{
+			strHtml += '<img src="'+ strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
+		}
+	}
+	
+	let popup = document.querySelector('#popup');
+	popup.innerHTML = strHtml;
+	
+	popup.style.position = 'absolute';
+	
+	let screenWidth = screen.width;
+	let screenHeight = screen.height;
+	
+	let wh = {
+		'tdHeight' : 150,
+		'w1920' : 75,
+		'w2560' : -70,
+		'h1080' : 1080+400,
+		'h1440' : 1440+500,
+		'hOther' : 500
+	}
+	
+	if(type == 'air')
+	{
+		popup.style.top = no * wh.tdHeight +'px';
+	}
+	else if(type == 'oil')
+	{
+		if(screenHeight <= 1080)
+		{
+			popup.style.top = (no * wh.tdHeight + wh.h1080) +'px';
+		}
+		else
+		{
+			popup.style.top = (no * wh.tdHeight + wh.h1440) +'px';
+		}
+	}
+	else
+	{
+		popup.style.top = screenHeight/2 - wh.hOther;
+	}
+	
+	if(screenWidth <= 1920)
+	{
+		popup.style.left = screenWidth/2 + wh.w1920;
+	}
+	else
+	{
+		popup.style.left = screenWidth/2 + wh.w2560;
+	}
+	
+	popup.style.background = 'white';
+	popup.style.border = '2px solid blue';
+	
+	let arrType = ['air', 'oil'];
+	
+	for(let i=0; i < 2; i++)
+	{
+		for(let j=1; j <= 14; j++)
+		{
+			let otherTr = document.querySelector('.cls_'+ arrType[i]+'_'+ j);
+			otherTr.style.border = '1px solid #dee2e6';
+			otherTr.style.background = 'white';
+		}
+	}
+	
+	o.style.border = '1px solid black';
+	o.style.background = '#eeeeee';
+	
+	popup.style.visibility = 'visible';
+	location.href = '#popup';
+}
+
+/* ***************
+ *
+ * 수정or오류 회로 표시
+ *
+ * @o - this
+ * @type - 'air', 'oil'
+ * @no - 1~14
+ * @isErrorCircuit - true, false
+ * @isExtra - true, undefined - 추가 회로 표시
+ *
+ * ***************/
+function fnShowFix(o, type, no, isErrorCircuit, isExtra)
+{
+	let strFromCls = 'clsErrorCircuit';
+	let strImgPath = '';
+	
+	if(isErrorCircuit)
+	{
+		strImgPath = 'sbg_{0}_fc_{1}.PNG';
+	}
+	else
+	{
+		strImgPath = 'sbg_{0}_ec_{1}.PNG';
+	}
+
+	let ec = document.querySelector('.'+ strFromCls);
+	strImgPath = strImgPath.replace('{0}', type);
+	if(typeof(isExtra) != 'undefined' && isExtra == true)
+	{
+		strImgPath = strImgPath.replace('{1}', no+'_pb2x');
+	}
+	else
+	{
+		strImgPath = strImgPath.replace('{1}', no);
+	}
+	
+	
+	let strPathPrefix = '../../lib/imgs/cert/sbg/';
+	let tempPath = strPathPrefix +type +'/'+ no +'/'+ strImgPath ;
+	ec.src = tempPath;
+}
+
+/* ***************
+ *
+ * 팝업 닫기
+ * 
+ * @type - 'air', 'oil'
+ * @no - 1~14
+ *
+ * ***************/
+function fnClosePopup(type, no)
+{
+	let popup = document.querySelector('#popup');
+	popup.style.visibility = 'hidden';
+	
+	let clickedTr = document.querySelector('.cls_'+type+'_'+no);
+	clickedTr.style.border = '1px solid #dee2e6';
+	clickedTr.style.background = 'white';
+}
+
+/* ***************
+ *
+ * 요약 표시
+ *
+ * ***************/
+function fnGetSummary()
+{
+	let strHtml = '';
+	
+	strHtml += '<table class="table table-bordered">';
+	// table header
+	strHtml += '<tr class="table-dark">';
+	strHtml += '<td>Type</td>';
+	strHtml += '<td>No</td>';
+	strHtml += '<td>FD</td>';
+	strHtml += '<td>Sols</td>';
+	strHtml += '<td>Relay</td>';
+	strHtml += '<td>Sol</td>';
+	strHtml += '<td>Fix</td>';
+	strHtml += '<td>Add</td>';
+	strHtml += '<td>Design</td>';
+	strHtml += '</tr>';
+	
+	let typeList = [sbg.air, sbg.oil]
+	
+	for(let i=0; i < typeList.length; i++)
+	{
+		let oType = typeList[i];
+		for(let j=0; j < oType.length; j++)
+		{
+			let o = oType[j];
+			strHtml += '<tr class="cls_'+ o.type +'_'+ o.no+'" onclick="javascript:fnShowPopup(this, \''+ o.type +'\','+ o.no +')">'	
+			strHtml += '<td>'+ fnGetType(o.type)+'</td>';
+			strHtml += '<td>'+ o.no+'</td>';
+			
+			//변위단계선도
+			strHtml += '<td>';
+			let fdList = o.fd;
+			for(let j=0; j < fdList.length; j++)
+			{
+				let oFd = fdList[j];
+				
+				strHtml += '<div class="clearBoth"></div>';
+				strHtml += '<div class="hBox"><br/>';
+				strHtml += '<div class="left mini_title">'+ fnGetType(oFd.type) +' '+ oFd.name +'</div><br/>'
+				
+				for(let k=0; k < oFd.list.length; k++)
+				{
+					strHtml += '<div class="left inner_box"><br/>';
+					strHtml += '<div class="'+ fnGetClassByType(oFd.list[k]) +'"></div><br/>';
+					strHtml += '</div><br/>';
+				}
+				
+				strHtml += '</div>';
+			}
+			
+			strHtml += '<br class="clearBoth"/>';
+			strHtml += '</td>';
+			
+			//sols
+			strHtml += '<td>';
+			for(let k=0; k < o.sols.length; k++)
+			{
+				let oSol = o.sols[k];
+				strHtml += '<h6>';
+				
+				if(oSol.type == '-')
+				{
+					strHtml +=  fnGetType('Valve');
+				}
+				else
+				{
+					strHtml +=  fnGetType(oSol.type);
+				}
+				strHtml += ' '+ oSol.name +' : '+ fnGetType(oSol.solType) +', 스위치 : '+ oSol.sw + ', 밸브 명 : '+ oSol.valveName;
+				let special = oSol.special;
+				if(special != null && typeof(special) != 'undefined')
+				{
+					strHtml += '<span class="badge text-bg-warning">'+oSol.special +'</span>';
+				}
+				strHtml += '</h6>'
+			}
+			strHtml += '</td>';
+			
+			strHtml += '<td>'+ o.relay+'</td>';
+			strHtml += '<td>'+ o.sol+'</td>';
+			
+			// fix list
+			strHtml += '<td>';
+			for(let k=0; k < o.fixList.length; k++)
+			{
+				strHtml += o.fixList[k] +'<br>';
+			}
+			strHtml += '</td>';
+			
+			// add list
+			strHtml += '<td>';
+			for(let k=0; k < o.addList.length; k++)
+			{
+				strHtml += o.addList[k] +'<br>';
+			}
+			strHtml += '</td>';
+			
+			strHtml += '<td>'+ o.design +'</td>';
+			strHtml += '</tr>'
+		}
+	}
+	
+	strHtml += '</table>';
+	
+	let contents = document.querySelector("#contents");
+	strHtml = strHtml.replaceAll('<br/>', '');
+	contents.innerHTML = strHtml;
+}
+
+/* ***************
+ *
+ * 타입에 대한 내용 전부 표시
+ *
+ * @oList - this
+ *
+ * ***************/
+function fnGetHtmlByTypeAll(oList)
+{
+	let strHtml = '';
+	
+	for(let i=0; i < oList.length; i++)
+	{
+		
+		let o = oList[i];
+		
+		strHtml += '<h2>'+ fnGetType(o.type) +' '+ o.no +'</h2><br/>';
+		strHtml += '<h3>변위 단계 선도</h3><br/>';
+		
+		
+		let fdList = o.fd;
+		for(let j=0; j < fdList.length; j++)
+		{
+			let oFd = fdList[j];
+			
+			strHtml += '<div class="clearBoth"></div>';
+			strHtml += '<div class="hBox"><br/>';
+			strHtml += '<div class="left mini_title">'+ fnGetType(oFd.type) +' '+ oFd.name +'</div><br/>'
+			
+			for(let k=0; k < oFd.list.length; k++)
+			{
+				strHtml += '<div class="left inner_box"><br/>';
+				strHtml += '<div class="'+ fnGetClassByType(oFd.list[k]) +'"></div><br/>';
+				strHtml += '</div><br/>';
+			}
+			
+			strHtml += '</div>';
+		}
+		
+		strHtml += '<br class="clearBoth"/>';
+	}
+	
+	return strHtml;
+}
+
+/* ***************
+ *
+ * 선택된 내용 적용
+ *
+ * ***************/
+function fnApply()
+{
+	let type = document.querySelector('select[name="type"] > option:checked').value;
+	let no = document.querySelector('select[name="no"] > option:checked').value;
+	
+	let strHtml = '';
+	
+	if(no == 'ALL')
+	{
+		if(type == 'ALL')
+		{
+			strHtml += fnGetHtmlByTypeAll(sbg.air);
+			strHtml += fnGetHtmlByTypeAll(sbg.oil);
+		}
+		else
+		{
+			strHtml += fnGetHtmlByTypeAll(sbg[fnGetTypeToEng(type)]);
+		}
+	}
+	else
+	{
+		let tempTypeList = [];
+		
+		if(type == 'ALL')
+		{
+			tempTypeList.push('air');
+			tempTypeList.push('oil')
+		}
+		else
+		{
+			tempTypeList.push(fnGetTypeToEng(type))
+		}
+		
+		for(let i=0; i < tempTypeList.length; i++)
+		{
+			let o = sbg[tempTypeList[i]][no-1];
+			
+			strHtml += '<h2>'+ fnGetType(o.type) +' '+ o.no +'</h2><br/>';
+			strHtml += '<h3>변위 단계 선도</h3><br/>';
+			
+			let fdList = o.fd;
+			for(let j=0; j < fdList.length; j++)
+			{
+				let oFd = fdList[j];
+				
+				strHtml += '<div class="clearBoth"></div>';
+				strHtml += '<div class="hBox"><br/>';
+				strHtml += '<div class="left mini_title">'+ fnGetType(oFd.type) +' '+ oFd.name +'</div><br/>'
+				
+				for(let k=0; k < oFd.list.length; k++)
+				{
+					strHtml += '<div class="left inner_box"><br/>';
+					strHtml += '<div class="'+ fnGetClassByType(oFd.list[k]) +'"></div><br/>';
+					strHtml += '</div><br/>';
+				}
+				
+				strHtml += '</div>';
+			}
+			strHtml += '<br class="clearBoth"/>';
+		}
+	}
+	
+	let contents = document.querySelector("#contents");
+	strHtml = strHtml.replaceAll('<br/>', '');
+	contents.innerHTML = strHtml;
+}
+</script>
+</body>
+<html>

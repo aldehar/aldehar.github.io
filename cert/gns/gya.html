@@ -10,7 +10,7 @@
   gtag('config', 'G-YYVVD0NXT2');
 </script>
 <link href="../../lib/css/bootstrap.min.css" rel="stylesheet">
-<link href="../../lib/css/sbg.css" rel="stylesheet">
+<link href="../../lib/css/cert/gya.css" rel="stylesheet">
 <style>
 
 </style>
@@ -48,7 +48,7 @@
 </div>
 <br/>
 <script src="../../lib/js/bootstrap.min.js"></script>
-<script src="../../lib/js/cert/sbg.js"></script>
+<script src="../../lib/js/cert/gns/gya.js"></script>
 <script>
 window.onload = function(){
 	// type
@@ -106,58 +106,23 @@ function fnShowPopup(o, type, no)
 	strHtml += '<h3>'+ fnGetType(type) +' '+ no +'</h3>';
 	strHtml += '<a style="margin-left:600px;" href="#none" onclick="javascript:fnClosePopup(\''+type +'\',' +no +');">닫기</a><br/>'
 	
-	let strPathPrefix = '../../lib/imgs/cert/sbg/';
+	let strPathPrefix = '../../lib/imgs/cert/gns/gya/';
 	
 	let imgTemplateList = [
-		'sbg_{0}_c_{1}.PNG',
-		'sbg_{0}_basic_fd_{1}.PNG',
-		'sbg_{0}_ec_{1}.PNG',
-		'sbg_{0}_fc_{1}.PNG',
-		'sbg_{0}_add_{1}.PNG',
-		'sbg_{0}_add_sol_{1}.png'
+		{'title' : '[기본 회로]', 'fileName' : 'gya_gns_{0}_{1}_fd.PNG'},
+		{'title' : '[단속+연속]', 'fileName' : 'gya_gns_{0}_{1}_basic.PNG'},
+		{'title' : '[응용 동작]', 'fileName' : 'gya_gns_{0}_{1}_add.PNG'},
 	];
 	
 	for(let i=0; i < imgTemplateList.length; i++)
 	{
-		let strImgPath = ''
-		strImgPath = imgTemplateList[i];
-		strImgPath = strImgPath.replace('{0}', type);
-		strImgPath = strImgPath.replace('{1}', no);
-		
-		// error circuit
-		if(i == 2)
-		{
-			let isChcked = document.querySelector('#flexCheckChecked').checked;
-			
-			if(isChcked)
-			{
-				strImgPath = strImgPath.replace('ec', 'fc');
-			}
-			
-			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true);">[수정 회로]</a>'
-			strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', false);">[오류 회로]</a>'
-			// 공압 10번 일 경우, PB2 제거 버전 추가
-			if(type == 'air' && no == 10)
-			{
-				strHtml += '<a href="#none" onclick="javascript:fnShowFix(this,\''+ type +'\','+ no +', true, true);">[수정2-PB2제거]</a>'
-			}
-			strHtml += '<br/>';
-			strHtml += '<img class="clsErrorCircuit" src="'+strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
-		}
-		// fix circuit
-		else if(i == 3)
-		{
-			continue;
-		}
-		else if(i == imgTemplateList.length -1)
-		{
-			strHtml += '<b>[응용 해답]</b><br/>';
-			strHtml += '<img src="'+ strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
-		}
-		else
-		{
-			strHtml += '<img src="'+ strPathPrefix + type +'/'+ no +'/'+ strImgPath +'"><br/>';
-		}
+		let fileName = ''
+		fileName = imgTemplateList[i].fileName;
+		fileName = fileName.replace('{0}', type);
+		fileName = fileName.replace('{1}', no);
+
+		strHtml += '<b>'+ imgTemplateList[i].title +'</b><br/>';
+		strHtml += '<img src="'+ strPathPrefix + type +'/'+ fileName +'"><br/>';
 	}
 	
 	let popup = document.querySelector('#popup');
@@ -172,9 +137,9 @@ function fnShowPopup(o, type, no)
 		'tdHeight' : 150,
 		'w1920' : 75,
 		'w2560' : -70,
-		'h1080' : 1080+400,
-		'h1440' : 1440+500,
-		'hOther' : 500
+		'h1080' : 1080+1000,
+		'h1440' : 1440+1500,
+		'hOther' : 1000
 	}
 	
 	if(type == 'air')
@@ -213,7 +178,7 @@ function fnShowPopup(o, type, no)
 	
 	for(let i=0; i < 2; i++)
 	{
-		for(let j=1; j <= 14; j++)
+		for(let j=1; j <= 18; j++)
 		{
 			let otherTr = document.querySelector('.cls_'+ arrType[i]+'_'+ j);
 			otherTr.style.border = '1px solid #dee2e6';
@@ -246,28 +211,19 @@ function fnShowFix(o, type, no, isErrorCircuit, isExtra)
 	
 	if(isErrorCircuit)
 	{
-		strImgPath = 'sbg_{0}_fc_{1}.PNG';
+		strImgPath = 'gya_gns_{0}_fc_{1}.PNG';
 	}
 	else
 	{
-		strImgPath = 'sbg_{0}_ec_{1}.PNG';
+		strImgPath = 'gya_gns_{0}_ec_{1}.PNG';
 	}
-
-	let ec = document.querySelector('.'+ strFromCls);
+	
 	strImgPath = strImgPath.replace('{0}', type);
-	if(typeof(isExtra) != 'undefined' && isExtra == true)
-	{
-		strImgPath = strImgPath.replace('{1}', no+'_pb2x');
-	}
-	else
-	{
-		strImgPath = strImgPath.replace('{1}', no);
-	}
+	strImgPath = strImgPath.replace('{1}', no);
 	
 	
-	let strPathPrefix = '../../lib/imgs/cert/sbg/';
+	let strPathPrefix = '../../lib/imgs/cert/gns/gya';
 	let tempPath = strPathPrefix +type +'/'+ no +'/'+ strImgPath ;
-	ec.src = tempPath;
 }
 
 /* ***************
@@ -304,14 +260,10 @@ function fnGetSummary()
 	strHtml += '<td>No</td>';
 	strHtml += '<td>FD</td>';
 	strHtml += '<td>Sols</td>';
-	strHtml += '<td>Relay</td>';
-	strHtml += '<td>Sol</td>';
-	strHtml += '<td>Fix</td>';
 	strHtml += '<td>Add</td>';
-	strHtml += '<td>Design</td>';
 	strHtml += '</tr>';
 	
-	let typeList = [sbg.air, sbg.oil]
+	let typeList = [gya.air, gya.oil]
 	
 	for(let i=0; i < typeList.length; i++)
 	{
@@ -372,17 +324,6 @@ function fnGetSummary()
 			}
 			strHtml += '</td>';
 			
-			strHtml += '<td>'+ o.relay+'</td>';
-			strHtml += '<td>'+ o.sol+'</td>';
-			
-			// fix list
-			strHtml += '<td>';
-			for(let k=0; k < o.fixList.length; k++)
-			{
-				strHtml += o.fixList[k] +'<br>';
-			}
-			strHtml += '</td>';
-			
 			// add list
 			strHtml += '<td>';
 			for(let k=0; k < o.addList.length; k++)
@@ -391,7 +332,6 @@ function fnGetSummary()
 			}
 			strHtml += '</td>';
 			
-			strHtml += '<td>'+ o.design +'</td>';
 			strHtml += '</tr>'
 		}
 	}
@@ -464,12 +404,12 @@ function fnApply()
 	{
 		if(type == 'ALL')
 		{
-			strHtml += fnGetHtmlByTypeAll(sbg.air);
-			strHtml += fnGetHtmlByTypeAll(sbg.oil);
+			strHtml += fnGetHtmlByTypeAll(gya.air);
+			strHtml += fnGetHtmlByTypeAll(gya.oil);
 		}
 		else
 		{
-			strHtml += fnGetHtmlByTypeAll(sbg[fnGetTypeToEng(type)]);
+			strHtml += fnGetHtmlByTypeAll(gya[fnGetTypeToEng(type)]);
 		}
 	}
 	else
@@ -488,7 +428,7 @@ function fnApply()
 		
 		for(let i=0; i < tempTypeList.length; i++)
 		{
-			let o = sbg[tempTypeList[i]][no-1];
+			let o = gya[tempTypeList[i]][no-1];
 			
 			strHtml += '<h2>'+ fnGetType(o.type) +' '+ o.no +'</h2><br/>';
 			strHtml += '<h3>변위 단계 선도</h3><br/>';

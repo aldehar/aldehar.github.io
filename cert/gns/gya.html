@@ -18,7 +18,11 @@
 <body>
 <div id="warnScreenSize" style="display:none;" >
 	<hr/>
-		<div class="alert alert-primary" role="alert">해당 페이지는 1920x1080 해상도 최적화 되어 있습니다.</div>
+		<div class="alert alert-primary" role="alert">해당 페이지는 2560x1440 해상도에 최적화 되어 있습니다.</div>
+		<div class="alert alert-primary" role="alert">공통사항으로 PB1 on/off 시 단속(1사이클 동작),<br>PB2 on/off 시 3 사이클 후 정지, PB3  on/off 시, 리셋</div>
+		<div class="alert alert-warning" role="alert">나합격 2022년 12월 발간된 교재를 활용하였으나, 개정되기 전인지 모르겠으나, 누락 혹은 잘못된게 보이니, 참고용도로만 사용해야함.
+																		<br>타이머, 카운터 등이 광문각에서 나온 윤교수님 책과는 약간 다른방식으로 되어있음.
+		</div>
 	<hr/>
 </div>
 <div id="selectBox">
@@ -33,8 +37,9 @@
 		<option>2</option>
 	</select>
 	<input type="button" value="적용" onclick="javascript:fnApply();">
-	-->
+	
 	<input type="button" value="요약" onclick="javascript:fnGetSummary();">
+	-->
 </div>
 <div id="contents">
 </div>
@@ -130,7 +135,7 @@ function fnShowPopup(o, type, no)
 	let wh = {
 		'tdHeight' : 150,
 		'w1920' : 75,
-		'w2560' : -70,
+		'w2560' : -325,
 		'h1080' : 1080+1200,
 		'h1440' : 1440+1500,
 		'hOther' : 1000
@@ -299,6 +304,7 @@ function fnGetSummary()
 			{
 				let oSol = o.sols[k];
 				strHtml += '<h6>';
+				strHtml += '<b>';
 				
 				if(oSol.type == '-')
 				{
@@ -308,7 +314,7 @@ function fnGetSummary()
 				{
 					strHtml +=  fnGetType(oSol.type);
 				}
-				strHtml += ' '+ oSol.name +' : '+ fnGetType(oSol.solType) +', 스위치 : '+ oSol.sw + ', 밸브 명 : '+ oSol.valveName;
+				strHtml += ' '+ oSol.name +'</b> : '+ fnGetType(oSol.solType) +', <b>스위치</b> : '+ oSol.sw + ', <b>밸브 명</b> : '+ oSol.valveName;
 				let special = oSol.special;
 				if(special != null && typeof(special) != 'undefined')
 				{

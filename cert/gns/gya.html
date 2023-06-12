@@ -79,11 +79,14 @@ window.onload = function(){
 	let screenHeight = screen.height;
 	console.log('화면 해상도 : '+ screenWidth +' x '+ screenHeight);
 	
+	/*
 	// 해상도 권장 표시
-	if(screenWidth != 1920 && screenHeight != 1080)
+	if(screenWidth != 2560 && screenHeight != 1440)
 	{
 		document.querySelector('#warnScreenSize').style.display = 'block';
 	}
+	*/
+	document.querySelector('#warnScreenSize').style.display = 'block';
 	
 	// 요약 표시
 	fnGetSummary();

@@ -167,6 +167,9 @@ function fnShowPopup(o, type, no)
 	
 	popup.style.position = 'absolute';
 	
+	
+	/*
+	// 해상도별 대응해볼까 했었는데...?
 	let screenWidth = screen.width;
 	let screenHeight = screen.height;
 	
@@ -207,15 +210,24 @@ function fnShowPopup(o, type, no)
 	{
 		popup.style.left = screenWidth/2 + wh.w2560;
 	}
+	*/
+	const ev = window.event;
+	const posX = ev.pageX;
+	const posY = ev.pageY;
+	//console.log('x : '+ posX +', y : '+ posY);
+	
+	popup.style.top = posY +'px';
+	popup.style.left = posX + 'px';
 	
 	popup.style.background = 'white';
 	popup.style.border = '2px solid blue';
 	
-	let arrType = ['air', 'oil'];
+	const arrType = ['air', 'oil'];
+	const TYPE_COUNT = 14;
 	
-	for(let i=0; i < 2; i++)
+	for(let i=0; i < arrType.length; i++)
 	{
-		for(let j=1; j <= 14; j++)
+		for(let j=1; j <= TYPE_COUNT; j++)
 		{
 			let otherTr = document.querySelector('.cls_'+ arrType[i]+'_'+ j);
 			otherTr.style.border = '1px solid #dee2e6';

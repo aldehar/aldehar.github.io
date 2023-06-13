@@ -16,9 +16,13 @@
 </style>
 </head>
 <body>
-<div id="warnScreenSize" style="display:none;" >
+<hr/>
+<div class="alert alert-success" role="alert">각 행을 클릭 시, 팝업이 보여집니다.</div>
+<div id="warnMsg" style="display:none;" >
 	<hr/>
+		<!--
 		<div class="alert alert-primary" role="alert">해당 페이지는 2560x1440 해상도에 최적화 되어 있습니다.</div>
+		-->
 		<div class="alert alert-primary" role="alert">공통사항으로 PB1 on/off 시 단속(1사이클 동작),<br>PB2 on/off 시 3 사이클 후 정지, PB3  on/off 시, 리셋</div>
 		<div class="alert alert-warning" role="alert">나합격 2022년 12월 발간된 교재를 활용하였으나, 개정되기 전인지 모르겠으나, 누락 혹은 잘못된게 보이니, 참고용도로만 사용해야함.
 																		<br>타이머, 카운터 등이 광문각에서 나온 윤교수님 책과는 약간 다른방식으로 되어있음.
@@ -83,10 +87,10 @@ window.onload = function(){
 	// 해상도 권장 표시
 	if(screenWidth != 2560 && screenHeight != 1440)
 	{
-		document.querySelector('#warnScreenSize').style.display = 'block';
+		document.querySelector('#warnMsg').style.display = 'block';
 	}
 	*/
-	document.querySelector('#warnScreenSize').style.display = 'block';
+	document.querySelector('#warnMsg').style.display = 'block';
 	
 	// 요약 표시
 	fnGetSummary();
@@ -132,6 +136,9 @@ function fnShowPopup(o, type, no)
 	
 	popup.style.position = 'absolute';
 	
+	
+	/*
+	// 해상도별 대응해볼까 했었는데...?
 	let screenWidth = screen.width;
 	let screenHeight = screen.height;
 	
@@ -172,15 +179,25 @@ function fnShowPopup(o, type, no)
 	{
 		popup.style.left = screenWidth/2 + wh.w2560;
 	}
+	*/
+	
+	const ev = window.event;
+	const posX = ev.pageX;
+	const posY = ev.pageY;
+	//console.log('x : '+ posX +', y : '+ posY);
+	
+	popup.style.top = posY +'px';
+	popup.style.left = posX + 'px';
 	
 	popup.style.background = 'white';
 	popup.style.border = '2px solid blue';
 	
-	let arrType = ['air', 'oil'];
+	const arrType = ['air', 'oil'];
+	const TYPE_COUNT = 18;
 	
-	for(let i=0; i < 2; i++)
+	for(let i=0; i < arrType.length; i++)
 	{
-		for(let j=1; j <= 18; j++)
+		for(let j=1; j <= TYPE_COUNT; j++)
 		{
 			let otherTr = document.querySelector('.cls_'+ arrType[i]+'_'+ j);
 			otherTr.style.border = '1px solid #dee2e6';

@@ -48,6 +48,8 @@
 </div>
 <div id="popup" style="visibility:hidden;">
 </div>
+<div id="noticePopup" style="visibility:hidden;">
+</div>
 <br/>
 <script src="../../lib/js/bootstrap.min.js"></script>
 <script src="../../lib/js/cert/sbg.js"></script>
@@ -90,7 +92,49 @@ window.onload = function(){
 	
 	// 요약 표시
 	fnGetSummary();
+	// 공지 팝업 표시
+	fnShowNoticePopup();
 };
+
+/* ***************
+ *
+ * 공지 팝업 표시
+ *
+ * ***************/
+function fnShowNoticePopup()
+{
+	let popup = document.querySelector('#noticePopup');
+	
+	let strHtml = '';
+	strHtml += '<h3>[알림]</h3>';
+	strHtml += '<a style="margin-left:600px;" href="#none" onclick="javascript:fnCloseNoticePopup();">닫기</a><br/>'
+	strHtml += '<b>Q-net의 공지(자료실-공개문제)에 2023년 기사 제2회 부터 내용이 수정되었는데 아래 사항 참고하세요.</b><br/>'
+	strHtml += '※ 일부 내용은 변경될 수 있으니 이점 유의하여 준비하시기 바랍니다.<br/>'
+	strHtml += '<b>* 변경사항</b><br/>'
+	strHtml += '- 공통: 수험자 유의사항 중 실격사항 정비<br/>'
+	strHtml += '- 공기압 8형: 응용제어동작 요구사항 변경<br/>'
+	strHtml += '- 공기압 10형: 전기 회로도 변경 및 응용제어동작 요구사항 변경<br/>'
+	strHtml += '- 공기압 12형: 전기 회로도 변경 및 응용제어동작 요구사항 일부 삭제<br/>'
+	strHtml += '- 유압 6형: 기본제어동작 단서조항 보완<br/>'
+	strHtml += '<b>참고자료 - 아래 자료를 꼭 참고하세요!(현재 페이지에는 반영이 안되어 있음!)</b><br/>'
+	strHtml += '<a href="https://cafe.naver.com/maintlicense/8190">네이버 카페 링크</a>'
+	popup.innerHTML = strHtml;
+	
+	popup.style.position = 'absolute';
+	popup.style.visibility = 'visible';
+	
+	const posX = 100;
+	const posY = 100;
+	//console.log('x : '+ posX +', y : '+ posY);
+	
+	popup.style.top = posY +'px';
+	popup.style.left = posX + 'px';
+	
+	popup.style.background = 'white';
+	popup.style.border = '2px solid blue';
+	
+	location.href = '#noticePopup';
+}
 
 /* ***************
  *
@@ -300,6 +344,17 @@ function fnClosePopup(type, no)
 	let clickedTr = document.querySelector('.cls_'+type+'_'+no);
 	clickedTr.style.border = '1px solid #dee2e6';
 	clickedTr.style.background = 'white';
+}
+
+/* ***************
+ *
+ * 공지 팝업 닫기
+ * 
+ * ***************/
+function fnCloseNoticePopup()
+{
+	let popup = document.querySelector('#noticePopup');
+	popup.style.visibility = 'hidden';
 }
 
 /* ***************
